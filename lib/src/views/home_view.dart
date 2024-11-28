@@ -99,7 +99,6 @@ class _HomeViewState extends State<HomeView> {
           }
 
           final wallpapers = wallpaperProvider.images;
-
           return NotificationListener<ScrollNotification>(
             onNotification: (ScrollNotification scrollInfo) {
               if (!wallpaperProvider.isLoading &&
@@ -158,11 +157,24 @@ class _HomeViewState extends State<HomeView> {
                                 ),
                               ),
                               const SizedBox(height: 15),
+                              Container(
+                                height: 150,
+                                clipBehavior: Clip.antiAlias,
+                                width: kSize.width,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Image.network(
+                                    fit: BoxFit.cover,
+                                    wallpapers.reversed.first.urls.regular),
+                              ),
+                              const SizedBox(height: 15),
                               StaggeredGrid.count(
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 4,
                                 crossAxisSpacing: kSize.height * .04,
-                                children: wallpapers.map((wallpaper) {
+                                children: wallpapers.reversed
+                                    .skip(1)
+                                    .map((wallpaper) {
                                   return StaggeredGridTile.count(
                                     crossAxisCellCount: 1,
                                     mainAxisCellCount: 1,
@@ -237,9 +249,12 @@ class _HomeViewState extends State<HomeView> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                wallpaper.user.name,
-                style: const TextStyle(fontSize: 14),
+              Flexible(
+                child: Text(
+                  wallpaper.user.name,
+                  maxLines: 1,
+                  style: const TextStyle(fontSize: 14),
+                ),
               ),
               const Icon(Icons.more_horiz),
             ],
