@@ -99,6 +99,9 @@ class _HomeViewState extends State<HomeView> {
           }
 
           final wallpapers = wallpaperProvider.images;
+          final reversedWallpapers = wallpaperProvider.images.reversed.toList();
+          final removedWallpaper = reversedWallpapers.removeAt(0);
+
           return NotificationListener<ScrollNotification>(
             onNotification: (ScrollNotification scrollInfo) {
               if (!wallpaperProvider.isLoading &&
@@ -165,16 +168,14 @@ class _HomeViewState extends State<HomeView> {
                                     borderRadius: BorderRadius.circular(10)),
                                 child: Image.network(
                                     fit: BoxFit.cover,
-                                    wallpapers.reversed.first.urls.regular),
+                                    removedWallpaper.urls.regular),
                               ),
                               const SizedBox(height: 15),
                               StaggeredGrid.count(
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 4,
                                 crossAxisSpacing: kSize.height * .04,
-                                children: wallpapers.reversed
-                                    .skip(1)
-                                    .map((wallpaper) {
+                                children: reversedWallpapers.map((wallpaper) {
                                   return StaggeredGridTile.count(
                                     crossAxisCellCount: 1,
                                     mainAxisCellCount: 1,
